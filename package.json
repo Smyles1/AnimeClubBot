@@ -1,0 +1,23 @@
+{
+  "name": "YagooBot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^12.5.3",
+    "ffmpeg": "0.0.4",
+    "ffmpeg-static": "^4.3.0",
+    "node": "^15.14.0",
+    "node-opus": "^0.3.3",
+    "npm": "^7.10.0",
+    "opus": "0.0.0",
+    "opusscript": "0.0.8",
+    "ytdl-core": "^4.5.0"
+  }
+}
