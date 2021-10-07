@@ -1,4 +1,4 @@
-const Discord = require('discord.js'); //sorry for the shitty unreadable code, I don't know how to make it readable. blame this on Mr. Cohen
+const Discord = require('discord.js'); //sorry for the shitty unreadable code, I don't know how to make it readable. blame this on Dr. Cohen
 const client = new Discord.Client();
 const TOKEN = process.env['TOKEN'];
 const ytdl = require('ytdl-core');
@@ -14,7 +14,7 @@ var tempPrefix = ''
 
 client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag}!`);
-	client.user.setActivity('!help (ナイスボット)');
+	db.get("PREFIX").then(value => {client.user.setActivity(value + 'help (ナイスボット)');});
 });
 
 client.on('message', async msg => {
@@ -66,7 +66,7 @@ client.on('message', async msg => {
 
 		} else if (msg.author == god && msg.content.startsWith(tempPrefix + 'eval')){ //eval (only for god)
 			eval(msg.content.substring(5))
-			
+
 		} else if (msg.content.includes(tempPrefix + 'send') && msg.author == god) { //sends the message anonymously, but only works if sent by god
 			console.log(msg.content.substring(6, 24));
 			client.users.fetch(msg.content.substring(6, 24)).then(user => {
