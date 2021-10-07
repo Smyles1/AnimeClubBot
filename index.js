@@ -15,12 +15,11 @@ var tempPrefix = ''
 client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag}!`);
 	client.user.setActivity('!help (ナイスボット)');
-  db.get("PREFIX").then(value => {console.log(value);});
 });
 
 client.on('message', async msg => {
 
-  db.get("PREFIX").then(value => {tempPrefix = value; console.log(tempPrefix)}); //reads the database and sets the PREFIX value to tempPrefix to prevent slowdowns of grabbing the value every time
+  db.get("PREFIX").then(value => {tempPrefix = value;}); //reads the database and sets the PREFIX value to tempPrefix to prevent slowdowns of grabbing the value every time
 
 	if (!msg.author.bot) {
     let guild = msg.guild;
@@ -52,8 +51,22 @@ client.on('message', async msg => {
           .addField(tempPrefix + 'send (user ID) (message)', 'Sends a message to the provided user ID (enable developer mode and right click a user to copy it).')
           .setThumbnail('https://i.imgur.com/0orqEIP.png')
           msg.channel.send(embed);
-      }
+      } else {
+				const embed = new Discord.MessageEmbed()   //special help menu for whoever owns bot (god)
+          .setTitle(msg.author.username + ' needs help')
+          .addField(tempPrefix + 'help', 'Sends this message.')  //tempPrefix is the current prefix, displays it along with the command for accuracy ig
+          .addField(tempPrefix + 'setprefix (prefix)', 'Changes the prefix of commands to prevent conflict with other bots.')
+          .addField(tempPrefix + 'join', 'Connects the bot to your current voice channel and plays music.')
+          .addField(tempPrefix + 'leave', 'Disconnects the bot from the voice channel you are connected to')
+          .addField(tempPrefix + 'botsend (user ID) (message)', 'Sends a message to the provided user ID (enable developer mode and right click a user to copy it).')
+					.addField(tempPrefix + 'eval', 'Does whatever you type, in javascript, on the server side (very dangerous lol, but use if you want ig)')
+          .setThumbnail('https://i.imgur.com/0orqEIP.png')
+          msg.channel.send(embed);
+			}
 
+		} else if (msg.author == god && msg.content.startsWith(tempPrefix + 'eval')){ //eval (only for god)
+			eval(msg.content.substring(5))
+			
 		} else if (msg.content.includes(tempPrefix + 'send') && msg.author == god) { //sends the message anonymously, but only works if sent by god
 			console.log(msg.content.substring(6, 24));
 			client.users.fetch(msg.content.substring(6, 24)).then(user => {
