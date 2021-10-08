@@ -2,7 +2,7 @@ const Discord = require('discord.js'); //sorry for the shitty unreadable code, I
 const client = new Discord.Client();
 const TOKEN = process.env['TOKEN'];
 const ytdl = require('ytdl-core');
-const god = '524679467915018261' //add the user ID of whoever runs the club (emma rn)
+const god = '451854618847215637' //add the user ID of whoever runs the club (emma rn)
 const { MessageEmbed } = require('discord.js');
 const Database = require("@replit/database")
 const db = new Database()
@@ -10,6 +10,18 @@ var tempPrefix = ''
 
 //db.set("PREFIX", ',').then(() => {console.log("Changed prefix")});
 
+function commandParse (lineInput, prefix, command, separator){
+	let newInput = lineInput.trim(lineInput.substring(prefix.length + command.length + 1));
+	let output = [];
+
+	while (newInput.length > 0){
+		newInput = newInput.substring(newInput.substring(0,newInput.indexOf(separator)));
+		output.push(newInput.substring(0,newInput.indexOf(separator)))
+		console.log("test");
+	}
+	console.log(output + "test");
+	return output;
+}
 
 
 client.on('ready', () => {
@@ -64,8 +76,14 @@ client.on('message', async msg => {
           msg.channel.send(embed);
 			}
 
+		} else if (msg.content.startsWith(tempPrefix + 'info')) {
+			console.log("test");
+			msg.channel.send(commandParse(msg.content, tempPrefix, '-'));
+			
+		} else if (msg.author == god && msg.content.startsWith(tempPrefix + 'setinfo')) {
+			//db.set("ROOM", "413").then(() => {});
 		} else if (msg.author == god && msg.content.startsWith(tempPrefix + 'eval')){ //eval (only for god)
-			eval(msg.content.substring(5))
+			msg.channel.send(eval(msg.content.substring(5)));
 
 		} else if (msg.content.includes(tempPrefix + 'send') && msg.author == god) { //sends the message anonymously, but only works if sent by god
 			console.log(msg.content.substring(6, 24));
@@ -91,5 +109,8 @@ client.on('message', async msg => {
     }
 	}
 });
+
+
+
 
 client.login(TOKEN);
