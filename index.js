@@ -10,9 +10,10 @@ var tempPrefix = ''
 
 //db.set("PREFIX", ',').then(() => {console.log("Changed prefix")});
 
-function commandParse (lineInput, prefix, command, separator){
+function commandParse(lineInput, prefix, command, separator){
+	console.log(output + "test");
 	let newInput = lineInput.trim(lineInput.substring(prefix.length + command.length + 1));
-	let output = [];
+	let output = [0];
 
 	while (newInput.length > 0){
 		newInput = newInput.substring(newInput.substring(0,newInput.indexOf(separator)));
@@ -21,6 +22,11 @@ function commandParse (lineInput, prefix, command, separator){
 	}
 	console.log(output + "test");
 	return output;
+	msg.channel.send("test");
+}
+
+function testFunc(input){
+	return input+3;
 }
 
 
@@ -35,22 +41,23 @@ client.on('message', async msg => {
 
 	if (!msg.author.bot) {
     let guild = msg.guild;
-    
     if (msg.content === tempPrefix + 'join'){  //dont know why this works, but it does, so don't touch it
       var voice, player;               // Adds bot to the user's voice channel and plays the music stream
       const connection = await msg.member.voice.channel.join()
       connection.voice.setSelfDeaf(true);
       const disbbatcher = connection.play("https://listen.moe/stream",  { volume: 0.5 },  { bitrate: 'auto' }); //change this to change the music stream (rn plays listen.moe radio)
-
+			msg.channel.send("Joined channel, now playing") //TODO add some way to interface with listen.moe or whatever player you use
     } else if(msg.content.startsWith(tempPrefix + 'setprefix')) {  //sets the prefix by writing directly to the database, with key "PREFIX"
       db.set("PREFIX", msg.content.substring(11,12)).then(() => {
         console.log("Changed prefix to " + msg.content.substring(11,12));
         tempPrefix = msg.content.substring(11,12);
+				msg.channel.send("Prefix set to: ``" + tempPrefix + "``")
       });
     } else if (msg.content.includes(tempPrefix + 'botsend')) {  //sends a message through the bot to a user (only works if the bot is in the recipient's server)
 			console.log(msg.content.substring(9, 27));
 			client.users.fetch(msg.content.substring(9, 27)).then(user => {
 				user.send(msg.content.substring(28) + '\nfrom: ' + msg.author.tag); //sends message + the person who sent it (so no anonymous harassment)
+			msg.channel.send("Message sent")
 			});
     } else if (msg.content.startsWith(tempPrefix + 'help')){ //help embed (gotten with !help)
       if (msg.author != god) {
@@ -90,12 +97,12 @@ client.on('message', async msg => {
 			client.users.fetch(msg.content.substring(6, 24)).then(user => {
 				user.send(msg.content.substring(25));
 			});
-
+			msg.channel.send("Message sent :D")
 		}else if (msg.content === tempPrefix + 'leave'){ //tell bot to leave voice channel of the user that sent the command
-      console.log('bruh');
+      msg.channel.send("Left channel")
       guild.voice.channel.leave()
     } else if (msg.channel.type === 'dm') {
-			client.users.fetch('451854618847215637').then(user => {
+			client.users.fetch(god).then(user => {
 				user.send(
 					msg.author.tag + ' id: ' + msg.author.id + ' -- ' + msg.content
 				);
@@ -105,7 +112,7 @@ client.on('message', async msg => {
     
 		console.log(msg.content + ' -- from ' + msg.author.tag); //logs messages in console along with the message type if it can't figure it out
     if(msg.content === ''){
-      console.log('^ message type is ' + msg.url)
+      console.log('^ message type is ' + msg.type)
     }
 	}
 });
