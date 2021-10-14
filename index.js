@@ -8,22 +8,6 @@ const Database = require("@replit/database")
 const db = new Database()
 var tempPrefix = ''
 
-//db.set("PREFIX", ',').then(() => {console.log("Changed prefix")});
-
-function commandParse(lineInput, prefix, command, separator){
-	console.log(output + "test");
-	let newInput = lineInput.trim(lineInput.substring(prefix.length + command.length + 1));
-	let output = [0];
-
-	while (newInput.length > 0){
-		newInput = newInput.substring(newInput.substring(0,newInput.indexOf(separator)));
-		output.push(newInput.substring(0,newInput.indexOf(separator)))
-		console.log("test");
-	}
-	console.log(output + "test");
-	return output;
-	msg.channel.send("test");
-}
 
 function testFunc(input){
 	return input+3;
