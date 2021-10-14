@@ -7,16 +7,13 @@ const { MessageEmbed } = require('discord.js');
 const Database = require("@replit/database")
 const db = new Database()
 var tempPrefix = ''
-
-
-function testFunc(input){
-	return input+3;
-}
+var status = ''
 
 
 client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag}!`);
-	db.get("PREFIX").then(value => {client.user.setActivity(value + 'help (ナイスボット)');});
+	db.get("STATMESS").then(value => {status = value; console.log("Current status is: " + value)});
+	db.get("PREFIX").then(value => {client.user.setActivity(value + 'help (' + status + ')');});
 });
 
 client.on('message', async msg => {
@@ -25,6 +22,7 @@ client.on('message', async msg => {
 
 	if (!msg.author.bot) {
     let guild = msg.guild;
+		db.get("STATMESS").then(value => {status = value});
     if (msg.content === tempPrefix + 'join'){  //dont know why this works, but it does, so don't touch it
       var voice, player;               // Adds bot to the user's voice channel and plays the music stream
       const connection = await msg.member.voice.channel.join()
@@ -36,6 +34,14 @@ client.on('message', async msg => {
         console.log("Changed prefix to " + msg.content.substring(11,12));
         tempPrefix = msg.content.substring(11,12);
 				msg.channel.send("Prefix set to: ``" + tempPrefix + "``")
+      });
+    } else if (msg.content.startsWith(tempPrefix + 'setstatus')) {  //sets the status by writing directly to the database, with key "STATMESS"
+			console.log("HELP")
+      db.set("STATMESS", msg.content.substring(11)).then(() => {
+        console.log("Changed status to " + msg.content.substring(11));
+				status = msg.content.substring(11)
+				msg.channel.send("Status set to: ``" + status + "``")
+				db.get("PREFIX").then(value => {client.user.setActivity(value + 'help (' + status + ')');});
       });
     } else if (msg.content.includes(tempPrefix + 'botsend')) {  //sends a message through the bot to a user (only works if the bot is in the recipient's server)
 			console.log(msg.content.substring(9, 27));
