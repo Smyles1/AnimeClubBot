@@ -19,6 +19,7 @@
     "npm": "^7.10.0",
     "opus": "0.0.0",
     "opusscript": "0.0.8",
-    "ytdl-core": "^4.5.0"
+    "os-utils": "0.0.14",
+    "ytdl-core": "^4.9.1"
   }
 }
